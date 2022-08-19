@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Pei-Shan Yen" />
+
+<meta name="date" content="2022-08-02" />
+
+<title>Introduction to R package copulaSim</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to R package copulaSim</h1>
+<h4 class="author">Pei-Shan Yen</h4>
+<h4 class="date">2022-08-02</h4>
+
+
+
+<div id="what-is-the-usage-of-the-r-package-copulasim" class="section level2">
+<h2>What is the usage of the R package <em>copulaSim</em>?</h2>
+<p>This package serves to simulate jointly distributed patient-level data from historical data based on the copula invariance property.</p>
+</div>
+<div id="why-do-we-need-to-perform-virtual-patient-simulation" class="section level2">
+<h2>Why do we need to perform virtual patient simulation?</h2>
+<p>To consistently optimize clinical trial designs and data analysis methods through trial simulation, we need to simulate multivariate mixed-type virtual patient data independent of designs and analysis methods under evaluation. To make the outcome of optimization more realistic, we should utilize relevant empirical patient-level data when it is available.</p>
+</div>
+<div id="the-challenges-faced-when-simulating-small-data" class="section level2">
+<h2>The challenges faced when simulating small data</h2>
+<p>When simulating small empirical data, the underlying marginal distributions and their dependence structure cannot be understood or verified thoroughly due to the limited sample size.</p>
+</div>
+<div id="solution-copula-invariance-property" class="section level2">
+<h2>Solution: copula invariance property</h2>
+<p>To resolve this issue, we use the copula invariance property to generate the joint distribution without making a strong parametric assumption. The theoretical background is addressed below.</p>
+<div id="sklars-theorem" class="section level3">
+<h3>Sklar’s Theorem</h3>
+<p>The idea of <a href="https://en.wikipedia.org/wiki/Copula_(probability_theory)#:~:text=Sklar&#39;s">copula</a> was first introduced by Dr. Abe Sklar in 1959 in the field of statistics. He proposed a theorem, which is later called Sklar’s theorem. This theorem essentially consists of two parts. First, the copula function can be used to describe the relationship between the joint and marginal distributions. This function assigns the value of joint distribution to each ordered pair of values of marginal distributions. That is, the coupla function maps the range of joint distribution from a d-dimensional ball to a unit line. The second part is that the copula function can be uniquely determined for every joint distribution.</p>
+</div>
+<div id="why-can-the-copula-function-be-employed-to-generate-joint-distribution" class="section level3">
+<h3>Why can the copula function be employed to generate joint distribution?</h3>
+<p>Each joint density can be viewed as the product of marginal densities multiplied by copula density. The copula density, which is defined as the partial derivative of the copula function, contains all the information about the dependence structure of the joint distribution. As a result, the joint distribution can be flexibly constructed by copula dependency and marginal distributions.</p>
+</div>
+<div id="the-implementation-of-copula-into-a-new-r-package" class="section level3">
+<h3>The implementation of copula into a new R package</h3>
+<p>To share this finding with the community, we have implemented the copula algorithm into a new R package entitled <a href="https://CRAN.R-project.org/package=copulaSim"><em>copulaSim</em></a>. The copulaSim package is designed to perform virtual patient simulation. The idea of the copula simulation algorithm is given in the following. Based on the copula invariance property, the dependence structure of the joint distribution can be well preserved when performing quantile transformation. Because of this feature, the copula simulation algorithm allows for the simulated data to resemble the empirical data.</p>
+<p><img src="data:text/plain,URL%20signature%20expired" /></p>
+</div>
+</div>
+<div id="the-demonstration-of-r-package-copulasim" class="section level2">
+<h2>The demonstration of R Package <em>copulaSim</em></h2>
+</div>
+<div id="generate-empirical-data" class="section level2">
+<h2>Generate empirical data:</h2>
+<div id="assume-that-the-single-arm-5-dimensional-empirical-data-follows-multivariate-normal-data-and-let-the-sample-size-of-empirical-data-be-30." class="section level3">
+<h3>Assume that the single-arm, 5-dimensional empirical data follows multivariate normal data, and let the sample size of empirical data be 30.</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mvtnorm)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>arm1 <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(<span class="at">n =</span> <span class="dv">30</span>, <span class="at">mean  =</span> <span class="fu">rep</span>(<span class="dv">10</span>, <span class="dv">5</span>), <span class="at">sigma =</span> <span class="fu">diag</span>(<span class="dv">5</span>) <span class="sc">+</span> <span class="fl">0.5</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>test_data <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">30</span>, <span class="fu">rep</span>(<span class="dv">1</span>, <span class="dv">30</span>), arm1))</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(test_data) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;arm&quot;</span>,<span class="fu">paste0</span>(<span class="st">&quot;time_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>))</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>((test_data), <span class="st">&quot;simple&quot;</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="right">id</th>
+<th align="right">arm</th>
+<th align="right">time_1</th>
+<th align="right">time_2</th>
+<th align="right">time_3</th>
+<th align="right">time_4</th>
+<th align="right">time_5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">11.646910</td>
+<td align="right">10.269294</td>
+<td align="right">10.481858</td>
+<td align="right">11.210719</td>
+<td align="right">10.090970</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">6.627463</td>
+<td align="right">8.317597</td>
+<td align="right">9.015460</td>
+<td align="right">9.574590</td>
+<td align="right">7.978692</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">1</td>
+<td align="right">10.773175</td>
+<td align="right">10.175516</td>
+<td align="right">10.487008</td>
+<td align="right">9.766223</td>
+<td align="right">11.746998</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">1</td>
+<td align="right">9.144505</td>
+<td align="right">9.348546</td>
+<td align="right">9.813288</td>
+<td align="right">9.634444</td>
+<td align="right">8.353821</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">1</td>
+<td align="right">11.520665</td>
+<td align="right">9.453226</td>
+<td align="right">10.269135</td>
+<td align="right">9.331822</td>
+<td align="right">9.627985</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="right">1</td>
+<td align="right">9.657934</td>
+<td align="right">10.185403</td>
+<td align="right">9.124125</td>
+<td align="right">9.730094</td>
+<td align="right">9.247632</td>
+</tr>
+<tr class="odd">
+<td align="right">7</td>
+<td align="right">1</td>
+<td align="right">6.954266</td>
+<td align="right">8.553138</td>
+<td align="right">7.376362</td>
+<td align="right">7.053906</td>
+<td align="right">7.832456</td>
+</tr>
+<tr class="even">
+<td align="right">8</td>
+<td align="right">1</td>
+<td align="right">8.725410</td>
+<td align="right">9.969419</td>
+<td align="right">11.386591</td>
+<td align="right">8.857343</td>
+<td align="right">9.638618</td>
+</tr>
+<tr class="odd">
+<td align="right">9</td>
+<td align="right">1</td>
+<td align="right">10.219469</td>
+<td align="right">8.959432</td>
+<td align="right">10.036200</td>
+<td align="right">8.549264</td>
+<td align="right">12.132358</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="right">1</td>
+<td align="right">11.995693</td>
+<td align="right">8.897448</td>
+<td align="right">8.208588</td>
+<td align="right">8.067165</td>
+<td align="right">9.118994</td>
+</tr>
+<tr class="odd">
+<td align="right">11</td>
+<td align="right">1</td>
+<td align="right">10.105470</td>
+<td align="right">11.162182</td>
+<td align="right">10.956714</td>
+<td align="right">13.127127</td>
+<td align="right">11.821425</td>
+</tr>
+<tr class="even">
+<td align="right">12</td>
+<td align="right">1</td>
+<td align="right">9.923194</td>
+<td align="right">11.248229</td>
+<td align="right">10.475311</td>
+<td align="right">9.990856</td>
+<td align="right">8.646211</td>
+</tr>
+<tr class="odd">
+<td align="right">13</td>
+<td align="right">1</td>
+<td align="right">9.051581</td>
+<td align="right">9.270937</td>
+<td align="right">7.823429</td>
+<td align="right">9.915488</td>
+<td align="right">7.917853</td>
+</tr>
+<tr class="even">
+<td align="right">14</td>
+<td align="right">1</td>
+<td align="right">10.324965</td>
+<td align="right">10.447948</td>
+<td align="right">10.343337</td>
+<td align="right">11.329486</td>
+<td align="right">7.466363</td>
+</tr>
+<tr class="odd">
+<td align="right">15</td>
+<td align="right">1</td>
+<td align="right">10.751450</td>
+<td align="right">8.252985</td>
+<td align="right">10.579884</td>
+<td align="right">10.301893</td>
+<td align="right">10.175539</td>
+</tr>
+<tr class="even">
+<td align="right">16</td>
+<td align="right">1</td>
+<td align="right">11.156088</td>
+<td align="right">9.999761</td>
+<td align="right">9.638360</td>
+<td align="right">8.909357</td>
+<td align="right">8.695054</td>
+</tr>
+<tr class="odd">
+<td align="right">17</td>
+<td align="right">1</td>
+<td align="right">9.775169</td>
+<td align="right">8.812014</td>
+<td align="right">10.392023</td>
+<td align="right">11.253106</td>
+<td align="right">10.642096</td>
+</tr>
+<tr class="even">
+<td align="right">18</td>
+<td align="right">1</td>
+<td align="right">10.884094</td>
+<td align="right">9.192141</td>
+<td align="right">10.126902</td>
+<td align="right">10.351798</td>
+<td align="right">11.504468</td>
+</tr>
+<tr class="odd">
+<td align="right">19</td>
+<td align="right">1</td>
+<td align="right">10.916468</td>
+<td align="right">10.423716</td>
+<td align="right">11.082694</td>
+<td align="right">11.297520</td>
+<td align="right">12.444548</td>
+</tr>
+<tr class="even">
+<td align="right">20</td>
+<td align="right">1</td>
+<td align="right">10.078414</td>
+<td align="right">8.432021</td>
+<td align="right">9.948595</td>
+<td align="right">9.750644</td>
+<td align="right">9.451321</td>
+</tr>
+<tr class="odd">
+<td align="right">21</td>
+<td align="right">1</td>
+<td align="right">11.523814</td>
+<td align="right">11.341755</td>
+<td align="right">11.695170</td>
+<td align="right">12.323437</td>
+<td align="right">8.786644</td>
+</tr>
+<tr class="even">
+<td align="right">22</td>
+<td align="right">1</td>
+<td align="right">10.878517</td>
+<td align="right">7.820464</td>
+<td align="right">10.442991</td>
+<td align="right">10.250747</td>
+<td align="right">9.547050</td>
+</tr>
+<tr class="odd">
+<td align="right">23</td>
+<td align="right">1</td>
+<td align="right">10.540325</td>
+<td align="right">12.465634</td>
+<td align="right">10.704040</td>
+<td align="right">12.488671</td>
+<td align="right">9.934841</td>
+</tr>
+<tr class="even">
+<td align="right">24</td>
+<td align="right">1</td>
+<td align="right">11.487375</td>
+<td align="right">10.196161</td>
+<td align="right">9.989142</td>
+<td align="right">9.223528</td>
+<td align="right">11.231917</td>
+</tr>
+<tr class="odd">
+<td align="right">25</td>
+<td align="right">1</td>
+<td align="right">9.254913</td>
+<td align="right">10.702573</td>
+<td align="right">10.184756</td>
+<td align="right">7.749516</td>
+<td align="right">10.799756</td>
+</tr>
+<tr class="even">
+<td align="right">26</td>
+<td align="right">1</td>
+<td align="right">8.894291</td>
+<td align="right">6.957514</td>
+<td align="right">7.319530</td>
+<td align="right">7.972501</td>
+<td align="right">8.272946</td>
+</tr>
+<tr class="odd">
+<td align="right">27</td>
+<td align="right">1</td>
+<td align="right">10.979493</td>
+<td align="right">9.881441</td>
+<td align="right">9.284832</td>
+<td align="right">12.328774</td>
+<td align="right">11.101806</td>
+</tr>
+<tr class="even">
+<td align="right">28</td>
+<td align="right">1</td>
+<td align="right">11.732922</td>
+<td align="right">12.032556</td>
+<td align="right">12.015052</td>
+<td align="right">11.676075</td>
+<td align="right">10.880316</td>
+</tr>
+<tr class="odd">
+<td align="right">29</td>
+<td align="right">1</td>
+<td align="right">9.994325</td>
+<td align="right">9.410948</td>
+<td align="right">10.061306</td>
+<td align="right">10.074411</td>
+<td align="right">10.925945</td>
+</tr>
+<tr class="even">
+<td align="right">30</td>
+<td align="right">1</td>
+<td align="right">8.569415</td>
+<td align="right">10.020435</td>
+<td align="right">11.014066</td>
+<td align="right">9.317199</td>
+<td align="right">9.464022</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="load-package-copulasim" class="section level2">
+<h2>Load package copulaSim</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(copulaSim)</span></code></pre></div>
+</div>
+<div id="use-function-copula.sim-to-generate-one-simulated-dataset-for-the-emperical-data" class="section level2">
+<h2>Use function <em>copula.sim</em> to generate ONE simulated dataset for the emperical data</h2>
+<table>
+<colgroup>
+<col width="18%" />
+<col width="60%" />
+<col width="21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Argument</th>
+<th>Definition</th>
+<th>Assigned Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>data.input</td>
+<td>The empirical data</td>
+<td>test_data[,-c(1,2)]</td>
+</tr>
+<tr class="even">
+<td>id.vec</td>
+<td>ID fo individual patient in the input data</td>
+<td>test_data$id</td>
+</tr>
+<tr class="odd">
+<td>arm.vec</td>
+<td>The column to identify the arm in clinical trial</td>
+<td>test_data$arm</td>
+</tr>
+<tr class="even">
+<td>n.patient</td>
+<td>The targeted number of patients in each simulated dataset</td>
+<td>50</td>
+</tr>
+<tr class="odd">
+<td>n.simulation</td>
+<td>The number of simulated datasets</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>seed</td>
+<td>The random seed to reproduce the simulation study</td>
+<td>2022</td>
+</tr>
+<tr class="odd">
+<td>validation.type</td>
+<td>Specify hypothesis test to detect the difference between empirical data and simulated data</td>
+<td>“energy”</td>
+</tr>
+<tr class="even">
+<td>verbose</td>
+<td>Whether to print message for simulation process or not</td>
+<td>TRUE</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><p>As a means of avoiding extreme sampling results when performing one simulated dataset, it is advised to use “energy” or “ball” in the argument <em>validation.type</em>. The purpose of doing this is to perform data validation, which ensures the similarity between empirical data and the simulated data based on 2-sample test.</p></li>
+<li><p>Below shows the 2-sample test result, which indicates that the joint distribution of the simulated data is not significantly different from the empirical data.</p></li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Generate 1 simulated dataset</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>simu_S1 <span class="ot">&lt;-</span> <span class="fu">copula.sim</span>(<span class="at">data.input =</span> test_data[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)], </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>                      <span class="at">id.vec =</span> test_data<span class="sc">$</span>id, </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>                      <span class="at">arm.vec =</span> test_data<span class="sc">$</span>arm,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n.patient =</span> <span class="dv">50</span> , </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">n.simulation =</span> <span class="dv">1</span>, </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">seed =</span> <span class="dv">2022</span>, </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">validation.type =</span> <span class="st">&quot;energy&quot;</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>                      <span class="at">verbose =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<pre><code>## Simulate 1th Dataset
+## p.value for energy test: 0.7970
+## Compelete simulating 1th Dataset in 0.160 seconds</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Obtain the simulated long-form dataset</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>simu_S1<span class="sc">$</span>data.simul</span></code></pre></div>
+<pre><code>## # A tibble: 250 x 6
+##       id   arm col.num col.name data.sim sim.id
+##    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;  &lt;int&gt;
+##  1     1     1       1 time_1      10.9       1
+##  2     2     1       1 time_1       8.86      1
+##  3     3     1       1 time_1      11.5       1
+##  4     4     1       1 time_1      11.5       1
+##  5     5     1       1 time_1       9.49      1
+##  6     6     1       1 time_1      10.0       1
+##  7     7     1       1 time_1      11.6       1
+##  8     8     1       1 time_1      10.7       1
+##  9     9     1       1 time_1       8.70      1
+## 10    10     1       1 time_1      10.0       1
+## # ... with 240 more rows
+## # i Use `print(n = ...)` to see more rows</code></pre>
+<ul>
+<li>Also, from the marginal density plot, we can see that the copula simulated data is close to the empirical data.</li>
+</ul>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="do">## Obtain the empirical long-form dataset</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>empir <span class="ot">&lt;-</span> simu_S1<span class="sc">$</span>data.input.long <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">cate =</span> <span class="st">&quot;empirical_n30&quot;</span>) <span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="at">data =</span> data.input)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="do">## Produce the marginal density plot</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>simul <span class="ot">&lt;-</span> simu_S1<span class="sc">$</span>data.simul <span class="sc">%&gt;%</span>  <span class="fu">mutate</span>(<span class="at">cate =</span> <span class="st">&quot;copulaSim_n50&quot;</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>         <span class="fu">rename</span>(<span class="at">data =</span> data.sim) <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>sim.id)  </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="fu">rbind</span>(empir, simul) <span class="sc">%&gt;%</span> <span class="fu">filter</span>(<span class="fu">grepl</span>(<span class="st">&#39;time&#39;</span>, col.name)) <span class="sc">%&gt;%</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> data, <span class="at">color =</span> cate, <span class="at">fill =</span> cate)) <span class="sc">+</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(.<span class="sc">~</span>col.name, <span class="at">ncol =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_density</span>(<span class="at">alpha =</span> <span class="fl">0.001</span>, <span class="at">size =</span> <span class="dv">1</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="use-function-extract.data.sim-to-convert-simulated-data-into-a-list-of-wide-form-matrices" class="section level2">
+<h2>Use function <em>extract.data.sim</em> to convert simulated data into a list of wide-form matrices</h2>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Converting the long-form simulated dataset to wide-form </span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>simu.wide <span class="ot">&lt;-</span> <span class="fu">extract.data.sim</span>(simu_S1)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>simu.wide</span></code></pre></div>
+<pre><code>## $`sim.id=1`
+## $`sim.id=1`$`arm=1`
+##          time_1    time_2    time_3    time_4    time_5
+##  [1,] 10.882214 11.782795 11.829682 12.703234 11.771197
+##  [2,]  8.864297 11.552918 10.559735  9.090521  7.671552
+##  [3,] 11.523731 12.326746 11.935101 13.116663 10.956906
+##  [4,] 11.523183 10.244910 11.000751 10.149085 12.430483
+##  [5,]  9.487384  8.182731 10.364411  9.830494 10.671266
+##  [6,] 10.035734  8.311126  9.336391  9.740772 11.024167
+##  [7,] 11.562668 10.436134 10.377385 10.904602 11.773561
+##  [8,] 10.670770  8.180897  7.347419  8.631056  9.295954
+##  [9,]  8.698251 10.044597 10.345788 11.213242  8.345151
+## [10,] 10.040009 10.006756  9.221086  9.319113 10.990252
+## [11,]  9.974107  8.174987 10.482672  7.990362 12.036490
+## [12,] 10.883196  9.346975  9.689017  7.736601  7.896831
+## [13,] 10.001058 10.186662 10.542313  8.694998  9.621085
+## [14,] 11.785938 11.164226 11.745467 12.366167 11.335162
+## [15,] 10.835325  9.707887  9.069775  7.798309 10.854649
+## [16,]  9.977064  7.935337  7.578375  7.916174 10.012469
+## [17,]  8.620151  7.922876  7.360444  7.720451  7.554585
+## [18,]  8.634307  7.255901  7.383075  7.432532  7.574158
+## [19,] 10.953475  8.457960 10.621095  8.524596  9.482929
+## [20,]  8.081317  9.195779  9.176780  7.841376  7.934947
+## [21,] 10.883318  9.406466 10.312328 11.348170 11.454102
+## [22,]  6.859692  8.343532 10.003129 10.688375  8.688254
+## [23,]  9.721303 10.214915 11.010897 11.308270  9.628388
+## [24,] 10.912065 11.174474 10.067575  9.795591  8.964425
+## [25,]  9.130176 10.185375 11.028622  9.953608 10.663402
+## [26,] 10.282695  8.585448  7.351914  8.037196  9.523494
+## [27,] 10.434761  9.433771  7.576724  8.857205  8.692707
+## [28,] 10.878189  9.370089 10.469696 11.976034 11.323951
+## [29,] 11.043796  9.361647 10.507122 11.480949 11.394239
+## [30,]  7.973582  9.906306 10.484769 12.285020  8.703697
+## [31,] 11.422629 11.245840 11.043007 10.156698  8.315459
+## [32,] 10.763738 10.583369  9.445984  9.592568  9.205381
+## [33,] 10.978934  8.422350  9.332877  9.319909 10.381483
+## [34,] 10.095110 10.192373 10.486172 10.837454 11.811422
+## [35,]  9.738053 10.030813 11.868960 11.528727 10.953413
+## [36,] 11.557554  8.504001 10.036275  8.866637 10.804163
+## [37,] 10.758517  8.301460 10.040082  8.866884  8.685943
+## [38,]  9.020668  8.593177 10.180643  9.596501 11.766536
+## [39,] 10.880619  9.888545 10.371159  8.619562 10.887735
+## [40,]  9.738026  8.905980 10.491806  8.543275 10.808045
+## [41,] 10.250263 10.432757 10.552412 10.321520  9.637336
+## [42,]  8.774332  9.186204 10.358860  8.694322 11.239469
+## [43,] 10.080631 11.216590  9.423501  8.864013  7.873485
+## [44,] 10.023380  8.260732 10.360511  9.469259  9.380528
+## [45,]  9.142095  7.169126  9.704404  8.219107  9.629918
+## [46,]  7.012989  8.295393 10.086290  9.737844  9.501242
+## [47,] 11.551832 10.436350 10.401349  9.244385  8.672310
+## [48,]  9.986050 10.317522  8.869056  9.324915  8.661655
+## [49,] 10.044765  9.443939  8.041164  8.107614  8.650004
+## [50,] 10.978597 10.017485 10.985975  9.959680  9.505250</code></pre>
+</div>
+<div id="use-function-compare.copula.sim-to-perform-the-comparison-between-empirical-data-and-multiple-simulated-datasets." class="section level2">
+<h2>Use function <em>compare.copula.sim</em> to perform the comparison between empirical data and multiple simulated datasets.</h2>
+<ul>
+<li>To increase the data variability, we suggest that the data validation option should be turned off when producing multiple simulated datasets. That is, the argument for validation.type should be set to “none”.</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Generate 100 simulated datasets</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>simu_S100 <span class="ot">&lt;-</span> <span class="fu">copula.sim</span>(<span class="at">data.input =</span> test_data[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)], </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                         <span class="at">id.vec =</span> test_data<span class="sc">$</span>id, </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>                         <span class="at">arm.vec =</span> test_data<span class="sc">$</span>arm,</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.patient =</span> <span class="dv">50</span> , </span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>                         <span class="at">n.simulation =</span> <span class="dv">100</span>, </span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>                         <span class="at">seed =</span> <span class="dv">2022</span>, </span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>                         <span class="at">validation.type =</span> <span class="st">&quot;none&quot;</span>,</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>                         <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="do">## Compare the marginal mean via the function compare.copula.sim </span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>compare <span class="ot">&lt;-</span> <span class="fu">compare.copula.sim</span>(simu_S100)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(compare<span class="sc">$</span>mean.comparison, <span class="st">&quot;simple&quot;</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th align="left">marginal.name</th>
+<th align="right">arm</th>
+<th align="right">empir.sample</th>
+<th align="right">simu.sample</th>
+<th align="right">n.simu</th>
+<th align="right">empir.mean</th>
+<th align="right">simu.mean</th>
+<th align="right">simu.mean.low.lim</th>
+<th align="right">simu.mean.upp.lim</th>
+<th align="right">simu.mean.RB</th>
+<th align="right">simu.mean.SB</th>
+<th align="right">simu.mean.RMSE</th>
+<th align="right">empir.sd</th>
+<th align="right">simu.sd</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">time_1</td>
+<td align="right">1</td>
+<td align="right">30</td>
+<td align="right">50</td>
+<td align="right">100</td>
+<td align="right">10.1363</td>
+<td align="right">10.1790</td>
+<td align="right">9.9230</td>
+<td align="right">10.4897</td>
+<td align="right">0.0042</td>
+<td align="right">0.1138</td>
+<td align="right">0.1589</td>
+<td align="right">1.3158</td>
+<td align="right">1.1974</td>
+</tr>
+<tr class="even">
+<td align="left">time_2</td>
+<td align="right">1</td>
+<td align="right">30</td>
+<td align="right">50</td>
+<td align="right">100</td>
+<td align="right">9.7400</td>
+<td align="right">9.7401</td>
+<td align="right">9.4410</td>
+<td align="right">10.0268</td>
+<td align="right">0.0000</td>
+<td align="right">0.1071</td>
+<td align="right">0.1482</td>
+<td align="right">1.2368</td>
+<td align="right">1.1104</td>
+</tr>
+<tr class="odd">
+<td align="left">time_3</td>
+<td align="right">1</td>
+<td align="right">30</td>
+<td align="right">50</td>
+<td align="right">100</td>
+<td align="right">10.0092</td>
+<td align="right">10.0045</td>
+<td align="right">9.7583</td>
+<td align="right">10.2418</td>
+<td align="right">-0.0005</td>
+<td align="right">0.0970</td>
+<td align="right">0.1275</td>
+<td align="right">1.1526</td>
+<td align="right">1.0543</td>
+</tr>
+<tr class="even">
+<td align="left">time_4</td>
+<td align="right">1</td>
+<td align="right">30</td>
+<td align="right">50</td>
+<td align="right">100</td>
+<td align="right">10.0469</td>
+<td align="right">10.0435</td>
+<td align="right">9.7241</td>
+<td align="right">10.3945</td>
+<td align="right">-0.0003</td>
+<td align="right">0.1083</td>
+<td align="right">0.1819</td>
+<td align="right">1.4916</td>
+<td align="right">1.3700</td>
+</tr>
+<tr class="odd">
+<td align="left">time_5</td>
+<td align="right">1</td>
+<td align="right">30</td>
+<td align="right">50</td>
+<td align="right">100</td>
+<td align="right">9.8493</td>
+<td align="right">9.8444</td>
+<td align="right">9.5266</td>
+<td align="right">10.1315</td>
+<td align="right">-0.0005</td>
+<td align="right">0.1005</td>
+<td align="right">0.1751</td>
+<td align="right">1.3968</td>
+<td align="right">1.3143</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="employ-function-new.arm.copula.sim-to-simulate-new-multivariate-datasets-with-shifted-mean-vector-from-existing-empirical-data." class="section level2">
+<h2>Employ function <em>new.arm.copula.sim</em> to simulate new multivariate datasets with shifted mean vector from existing empirical data.</h2>
+<ul>
+<li>This function assumes that the dependence structure of the new-arm data and that of the empirical data are the same.</li>
+</ul>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Generate Empirical Data </span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="do">##  Assume that the single-arm, 3-dimensional empirical data follows multivariate normal data</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>arm1 <span class="ot">&lt;-</span> <span class="fu">rmvnorm</span>(<span class="at">n =</span> <span class="dv">80</span>, <span class="at">mean  =</span> <span class="fu">c</span>(<span class="dv">10</span>,<span class="fl">10.5</span>,<span class="dv">11</span>), <span class="at">sigma =</span> <span class="fu">diag</span>(<span class="dv">3</span>) <span class="sc">+</span> <span class="fl">0.5</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>test_data2 <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(<span class="fu">cbind</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">80</span>, <span class="fu">rep</span>(<span class="dv">1</span>,<span class="dv">80</span>), arm1))</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(test_data2) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;arm&quot;</span>, <span class="fu">paste0</span>(<span class="st">&quot;time_&quot;</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>))</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="do">## Generate 1 simulated datasets with one empirical arm and two new-arms</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="do">## The mean difference between empirical arm and </span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="do">## (i) the 1st new arm is assumed to be 2.5, 2.55, and 2.6 at each time point</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="do">## (ii) the 2nd new arm is assumed to be 4.5, 4.55, and 4.6 at each time point</span></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>newARM <span class="ot">&lt;-</span> <span class="fu">new.arm.copula.sim</span>(<span class="at">data.input =</span> test_data2[,<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)], </span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>                             <span class="at">id.vec =</span> test_data2<span class="sc">$</span>id,</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>                             <span class="at">arm.vec =</span> test_data2<span class="sc">$</span>arm, </span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>                             <span class="at">n.patient =</span> <span class="dv">100</span> , </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>                             <span class="at">n.simulation =</span> <span class="dv">1</span>, </span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>                             <span class="at">seed =</span> <span class="dv">2022</span>,</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>                             <span class="at">shift.vec.list =</span> <span class="fu">list</span>(<span class="fu">c</span>(<span class="fl">2.5</span>,<span class="fl">2.55</span>,<span class="fl">2.6</span>), <span class="fu">c</span>(<span class="fl">4.5</span>,<span class="fl">4.55</span>,<span class="fl">4.6</span>)),</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>                             <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="do">## Obtain the simulated long-form dataset</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>newARM<span class="sc">$</span>data.simul</span></code></pre></div>
+<pre><code>## # A tibble: 900 x 6
+##       id   arm col.num col.name data.sim sim.id
+##    &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt;  &lt;int&gt;
+##  1     1     1       1 time_1       9.63      1
+##  2     2     1       1 time_1       9.65      1
+##  3     3     1       1 time_1       8.24      1
+##  4     4     1       1 time_1      12.1       1
+##  5     5     1       1 time_1       9.12      1
+##  6     6     1       1 time_1      10.0       1
+##  7     7     1       1 time_1       8.56      1
+##  8     8     1       1 time_1      10.6       1
+##  9     9     1       1 time_1      10.5       1
+## 10    10     1       1 time_1       8.48      1
+## # ... with 890 more rows
+## # i Use `print(n = ...)` to see more rows</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Verify the mean difference</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>newARM<span class="sc">$</span>data.simul <span class="sc">%&gt;%</span>  </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(.data<span class="sc">$</span>arm, .data<span class="sc">$</span>col.num) <span class="sc">%&gt;%</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">N =</span> <span class="fu">n</span>(), <span class="at">Mean =</span> <span class="fu">mean</span>(.data<span class="sc">$</span>data.sim), <span class="at">SD =</span> <span class="fu">sd</span>(.data<span class="sc">$</span>data.sim))</span></code></pre></div>
+<pre><code>## # A tibble: 9 x 5
+## # Groups:   arm [3]
+##     arm col.num     N  Mean    SD
+##   &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1     1       1   100  9.71 1.01 
+## 2     1       2   100 10.2  1.26 
+## 3     1       3   100 10.8  1.23 
+## 4     2       1   100 12.0  0.975
+## 5     2       2   100 12.7  1.30 
+## 6     2       3   100 13.3  1.14 
+## 7     3       1   100 14.0  0.975
+## 8     3       2   100 14.7  1.30 
+## 9     3       3   100 15.3  1.14</code></pre>
+<table>
+<tbody>
+<tr class="odd">
+<td>- Authored by Pei-Shan Yen</td>
+</tr>
+<tr class="even">
+<td>- CRAN page: <a href="https://CRAN.R-project.org/package=copulaSim" class="uri">https://CRAN.R-project.org/package=copulaSim</a></td>
+</tr>
+<tr class="odd">
+<td>- github page: <a href="https://github.com/psyen0824/copulaSim" class="uri">https://github.com/psyen0824/copulaSim</a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="acknowledgement" class="section level2">
+<h2>Acknowledgement</h2>
+<p>This research project and the development of the R package are supported by AbbVie Experiential Internship Program. I am also grateful to Dr. Xuemin Gu, Dr. Jenny Jiao, and Dr. Jane Zhang at the Eyecare Clinical Statistics Team for valuable comments on this work.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
